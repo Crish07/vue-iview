@@ -3,7 +3,7 @@
  * @Author: Crish<714415473@qq.com>
  * @Date: 2018-02-28 17:20:11
  * @LastEditors: Crish<714415473@qq.com>
- * @LastEditTime: 2020-03-10 17:42:39
+ * @LastEditTime: 2020-03-10 17:44:42
  -->
 
 # vue-iview
@@ -26,7 +26,7 @@ npm run build
 npm run build --report
 ```
 
-## 项目部分页面
+## 页面预览
 
 ![Image](https://github.com/Crish07/images/blob/master/vue-iview/%E7%99%BB%E9%99%86%E9%A1%B5.png)
 

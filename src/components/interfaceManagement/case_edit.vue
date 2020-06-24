@@ -3,7 +3,7 @@
  * @Author: Crish<714415473@qq.com>
  * @Date: 2020-06-24 15:06:45
  * @LastEditors: Crish<714415473@qq.com>
- * @LastEditTime: 2020-06-24 21:17:00
+ * @LastEditTime: 2020-06-24 23:02:48
 --> 
 
 <template lang="pug">
@@ -11,21 +11,21 @@
     div
       Select(v-model="caseParams.type" style="width:200px; margin-right: 5px;")
         Option(v-for="item in stage" :value="item.value" :key="item.value") {{ item.label }}
-      Button(type="primary" icon="ios-play" style="margin-right: 5px;" @click="caseRun()") 运行
-      Button(type="success" icon="ios-filing-outline" @click="caseSave()") 保存
+      Button(type="primary" icon="ios-play" style="margin-right: 5px;" @click="caseRun('formValidate')") 运行
+      Button(type="success" icon="ios-filing-outline" @click="caseSave('formValidate')") 保存
     div(class="line-box pt10 pr10")
-      Form(:model="caseParams" :label-width="80")
+      Form(ref="formValidate" :rules="ruleValidate" :model="caseParams" :label-width="80")
         FormItem(label="接口名称")
           Input(v-model="caseParams.name" readonly)
         FormItem(label="接口url")
           Input(v-model="caseParams.interface" readonly)
-        FormItem(label="用例名称")
+        FormItem(label="用例名称" prop="caseName")
           Input(v-model="caseParams.caseName")
-        FormItem(label="准入case")
+        FormItem(label="准入case" prop="isCase")
           Select(v-model="caseParams.isCase")
             Option(value="1") 是
             Option(value="0") 否
-        FormItem(label="所属环境")
+        FormItem(label="所属环境" prop="environment")
           Select(v-model="caseParams.environment")
             Option(value="1") 仅支持stage
             Option(value="0") other
@@ -81,7 +81,7 @@
 
 <script>
 export default {
-  name: 'modalTwo',
+  name: 'caseEdit',
   data () {
     return {
       stage: [ // 第一个下拉框option选项
@@ -104,6 +104,17 @@ export default {
         verifyType: 'reg',// 校验单选项
         verifyString: '', // 校验匹配文本
         requestParams: 'application/json', // 请求参数
+      },
+      ruleValidate: { // 校验信息
+        caseName: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+        isCase: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+        environment: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ]
       },
       headerColumns: [ // 添加header表格表头
         {
@@ -196,8 +207,15 @@ export default {
     /**
      * 运行
      */
-    caseRun () {
+    caseRun (name) {
       console.log('全部所填内容:', this.caseParams, 'header表格内容:', this.headerData, '请求参数表格内容', this.requestTableData);
+      this.$refs[name].validate((valid) => {
+        if(valid) {
+          this.$Message.success('Success!');
+        } else {
+          this.$Message.error('Fail!');
+        }
+      })
       let payload = { // 自己组合需要传给后台的参数
 
       }

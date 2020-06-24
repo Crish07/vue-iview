@@ -69,6 +69,19 @@ export const otherRouter = [
       }
     ]
   },
+  {
+    path: '/viewInterface',
+    name: 'viewInterface',
+    title: '查看接口用例',
+    component: Main,
+    children: [
+      {
+        path: '/viewCase', title: '查看接口用例', name: 'viewCase', component: resolve => {
+          require(['@/components/interfaceManagement/view_case.vue'], resolve);
+        }
+      }
+    ]
+  },
 ];
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里

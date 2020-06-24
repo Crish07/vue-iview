@@ -1,13 +1,13 @@
 <template lang="pug">
   Modal(v-model="modal" title="添加接口" width="600" @on-ok="ok" @on-cancel="cancel")
     Form(:model="formItem" :label-width="80")
-      FormItem(label="请求域名")
+      FormItem(label="请求域名：")
         Input(v-model="formItem.input" placeholder="request_host : http://stage-api-gateway.vipkid-qa.com.cn")
-      FormItem(label="请求url")
+      FormItem(label="请求url：")
         Input(v-model="formItem.input" placeholder="request_url : /api/test")
       FormItem(label="接口名称：")
         Input(v-model="formItem.input" placeholder="interface_name:")
-      FormItem(label="请求方法")
+      FormItem(label="请求方法：")
         Select(v-model="formItem.select")
           Option(value="GET") GET
           Option(value="POST") POST
@@ -43,7 +43,7 @@ export default {
   methods: {
     ok () {
       this.$Message.info('点击了确定');
-      this.$router.push({
+      this.$router.push({ // 跳转到编辑接口用例
         name: 'interfaceCaseEdit'
       });
     },

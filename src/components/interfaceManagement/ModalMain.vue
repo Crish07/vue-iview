@@ -1,7 +1,12 @@
 <template lang="pug">
   Card
-    Button(type="primary" @click="btnClick") 添加接口
     ModalOne(:myModal="modal" @on-modalClick="modalClick" @on-change="modalChange")
+    Form(:model="caseParams" :label-width="65" inline class="searchForm")
+      FormItem(label="用例名称：")
+        Input(v-model="caseParams.caseName")
+      FormItem
+        Button(type="primary" @click="handleSubmit()") 查询
+        Button(type="success" @click="btnClick" style="margin-left: 5px;") 添加接口
     Table(border :columns="columns" :data="data")
     div(style="margin: 10px;overflow: hidden")
       div(style="float: right;")
@@ -9,11 +14,11 @@
 </template>
 
 <script>
-  import ModalOne from './ModalOne.vue';
+import ModalOne from './ModalOne.vue';
 
-  export default {
-    name: 'ModalMain',
-    computed: {
+export default {
+  name: 'ModalMain',
+  computed: {
     data () {
       return this.$store.state.table.data;
     },
@@ -22,13 +27,27 @@
       columns.push({
         title: 'Action',
         key: 'action',
-        width: 150,
+        width: 200,
         align: 'center',
         render: (h, params) => {
           return h('div', [
             h('Button', {
               props: {
                 type: 'primary',
+                size: 'small'
+              },
+              style: {
+                marginRight: '5px'
+              },
+              on: {
+                click: () => {
+                  this.showCase(params.row.Id);
+                }
+              }
+            }, '查看用例'),
+            h('Button', {
+              props: {
+                type: 'success',
                 size: 'small'
               },
               style: {
@@ -66,33 +85,36 @@
       return this.$store.state.table.size;
     },
   },
-    components: {
-      ModalOne
-    },
-    data() {
-      return {
-        modal: false,
-        modal1: false,
-        loading: false,
-      }
-    },
-    created () {
+  components: {
+    ModalOne
+  },
+  data () {
+    return {
+      caseParams: { // 查询条件
+        caseName: ''
+      },
+      modal: false,
+      modal1: false,
+      loading: false,
+    }
+  },
+  created () {
     this.tableInit();
+  },
+  methods: {
+    btnClick () {
+      this.modal = true;
     },
-    methods: {
-      btnClick () {
-        this.modal = true;
-      },
-      modalClick (val) {//接收子组件对modal变更后的数据
-        this.modal = val;
-      },
-      modalChange (val) {//接收弹框1里面的btn点击后传回的值
-        this.modal1 = val;
-      },
-      modal1Click (val) {//接收子组件对modal1变更后的数据
-        this.modal1 = val;
-      },
-      tableInit () {
+    modalClick (val) {//接收子组件对modal变更后的数据
+      this.modal = val;
+    },
+    modalChange (val) {//接收弹框1里面的btn点击后传回的值
+      this.modal1 = val;
+    },
+    modal1Click (val) {//接收子组件对modal1变更后的数据
+      this.modal1 = val;
+    },
+    tableInit () {
       this.loading = true;
       this.$store.dispatch('table/INIT_DATA').then(() => {
         this.mockTableData();
@@ -124,10 +146,36 @@
     remove (index) {
       this.data.splice(index, 1);
     },
+    /**
+     * 查看用例
+     */
+    showCase (id) {
+      this.$router.push({ // 跳转到查看接口用例
+        name: 'viewCase',
+        params: {
+          id
+        }
+      });
+    },
+    /**
+     * 查询
+     */
+    handleSubmit () {
+      console.log(this.caseParams);
     }
   }
+}
 </script>
 
 <style>
-
+.searchForm .ivu-form-item-content {
+  margin-left: 0 !important;
+  float: left;
+}
+.searchForm .ivu-form-item-label {
+  padding: 10px 0px 10px 0;
+}
+.searchForm .ivu-form-item {
+  margin-bottom: 10px;
+}
 </style>

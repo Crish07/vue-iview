@@ -56,6 +56,19 @@ export const otherRouter = [
       }
     ]
   },
+  {
+    path: '/interface',
+    name: 'interfaceCase',
+    title: '编辑接口用例',
+    component: Main,
+    children: [
+      {
+        path: '/interfaceCaseEdit', title: '编辑接口用例', name: 'interfaceCaseEdit', component: resolve => {
+          require(['@/components/interfaceManagement/case_edit'], resolve);
+        }
+      }
+    ]
+  },
 ];
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
@@ -71,6 +84,30 @@ export const appRouter = [
       {
         path: '/index', title: '首页', name: 'home_index', component: resolve => {
           require(['@/components/homepage/Index'], resolve);
+        }
+      },
+    ]
+  },
+  {
+    path: '/interface',
+    name: 'interfaceManagement',
+    icon: 'grid',
+    title: '接口管理',
+    component: Main,
+    children: [
+      {
+        path: '/modal_index', title: '接口用例管理', name: 'modal_index', icon: 'ios-list', component: resolve => {
+          require(['@/components/interfaceManagement/ModalMain'], resolve);
+        }
+      },
+      {
+        path: '/interface/management', title: '添加接口用例', name: 'interface_management', icon: 'ionic', component: resolve => {
+          require(['@/components/interfaceManagement/tableMain'], resolve);
+        }
+      },
+      {
+        path: '/interface/batchOperation', title: '批量运行任务', name: 'batch_operation', icon: 'ios-compose', component: resolve => {
+          require(['@/components/table-components/operationTable'], resolve);
         }
       },
     ]
